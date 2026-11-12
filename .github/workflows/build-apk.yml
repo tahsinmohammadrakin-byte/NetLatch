@@ -18,6 +18,11 @@ jobs:
       - name: Check out source
         uses: actions/checkout@v4
 
+      - name: Extract Android project
+        run: |
+          unzip -q NetLatch-GitHub-Starter.zip -d project
+          ls -la project/NetLatch
+
       - name: Set up Java
         uses: actions/setup-java@v4
         with:
@@ -36,12 +41,12 @@ jobs:
         run: sdkmanager --install "platforms;android-35" "build-tools;35.0.0"
 
       - name: Build debug APK
-        run: gradle --no-daemon assembleDebug
+        run: gradle -p project/NetLatch --no-daemon assembleDebug
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: NetLatch-debug-apk
-          path: app/build/outputs/apk/debug/app-debug.apk
+          path: project/NetLatch/app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
           
